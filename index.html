@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CAM PONG</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-family: 'Courier New', monospace;
+      color: #fff;
+      overflow: hidden;
+    }
+    #game-container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+    }
+    #camera-feed {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transform: scaleX(-1);
+      opacity: 0.3;
+    }
+    #game-canvas {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+    }
+    #overlay {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.75);
+      z-index: 10;
+    }
+    #overlay.hidden { display: none; }
+    #overlay h1 {
+      font-size: 72px;
+      margin-bottom: 16px;
+      text-shadow: 0 0 40px #ff6666, 0 0 80px #6666ff;
+      letter-spacing: 12px;
+    }
+    #overlay p { font-size: 20px; color: #aaa; margin-bottom: 8px; }
+    #overlay button {
+      margin-top: 24px;
+      padding: 16px 48px;
+      font-size: 24px;
+      font-family: 'Courier New', monospace;
+      background: linear-gradient(135deg, #ff6666, #6666ff);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    #overlay button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 30px rgba(255,100,100,0.5), 0 0 60px rgba(100,100,255,0.3);
+    }
+    #status {
+      position: fixed;
+      bottom: 12px;
+      font-size: 14px;
+      color: #666;
+      z-index: 20;
+    }
+  </style>
+</head>
+<body>
+  <div id="game-container">
+    <video id="camera-feed" autoplay playsinline></video>
+    <canvas id="game-canvas"></canvas>
+    <div id="overlay">
+      <h1>CAM PONG</h1>
+      <p>Control paddles with your hands in front of the camera</p>
+      <p>Left side = Player 1 &nbsp;|&nbsp; Right side = Player 2</p>
+      <div id="mode-selector" style="margin-top: 20px; display: flex; gap: 0; border-radius: 6px; overflow: hidden; border: 1px solid #555;">
+        <label style="padding: 10px 20px; cursor: pointer; background: rgba(255,255,255,0.15); font-size: 14px; transition: background 0.15s;">
+          <input type="radio" name="control-mode" value="free" checked style="margin-right: 6px;">Free Movement
+        </label>
+        <label style="padding: 10px 20px; cursor: pointer; background: transparent; font-size: 14px; transition: background 0.15s;">
+          <input type="radio" name="control-mode" value="fingers" style="margin-right: 6px;">Finger Count
+        </label>
+      </div>
+      <p style="font-size: 13px; color: #666; margin-top: 6px;" id="mode-desc">Move hand up/down to control paddle</p>
+      <button id="start-btn">START</button>
+    </div>
+  </div>
+  <div id="status"></div>
+  <script>
+    document.querySelectorAll('input[name="control-mode"]').forEach(r => {
+      r.addEventListener('change', () => {
+        const desc = document.getElementById('mode-desc');
+        const labels = document.querySelectorAll('#mode-selector label');
+        labels.forEach(l => l.style.background = 'transparent');
+        r.closest('label').style.background = 'rgba(255,255,255,0.15)';
+        desc.textContent = r.value === 'fingers'
+          ? 'Show 1-5 fingers to position paddle in zones'
+          : 'Move hand up/down to control paddle';
+      });
+    });
+  </script>
+  <script type="module" src="js/game.js"></script>
+</body>
+</html>
