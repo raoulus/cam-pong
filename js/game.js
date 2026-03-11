@@ -521,6 +521,8 @@ resizeCanvas();
 window.addEventListener('resize', resizeCanvas);
 
 startBtn.addEventListener('click', async () => {
+  startBtn.disabled = true;
+  startBtn.textContent = 'LOADING...';
   try {
     await setupCamera(video, statusEl);
     await setupHandTracking(statusEl);
@@ -530,6 +532,8 @@ startBtn.addEventListener('click', async () => {
   } catch (err) {
     statusEl.textContent = `Error: ${err.message}`;
     console.error(err);
+    startBtn.disabled = false;
+    startBtn.textContent = 'RETRY';
   }
 });
 

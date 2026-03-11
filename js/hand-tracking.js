@@ -24,7 +24,7 @@ export async function setupHandTracking(statusEl) {
   const vision = await FilesetResolver.forVisionTasks(
     'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.18/wasm'
   );
-  handLandmarker = await HandLandmarker.createFromOptions(vision, {
+  const options = {
     baseOptions: {
       modelAssetPath:
         'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task',
@@ -32,10 +32,18 @@ export async function setupHandTracking(statusEl) {
     },
     runningMode: 'VIDEO',
     numHands: 2,
-    minHandDetectionConfidence: 0.4,  // lower threshold = detect more hands
+    minHandDetectionConfidence: 0.4,
     minHandPresenceConfidence: 0.4,
     minTrackingConfidence: 0.4,
-  });
+  };
+  try {
+    handLandmarker = await HandLandmarker.createFromOptions(vision, options);
+  } catch (gpuErr) {
+    console.warn('GPU delegate failed, falling back to CPU:', gpuErr);
+    statusEl.textContent = 'Loading hand tracking (CPU fallback)...';
+    options.baseOptions.delegate = 'CPU';
+    handLandmarker = await HandLandmarker.createFromOptions(vision, options);
+  }
   statusEl.textContent = 'Hand tracking ready.';
 }
 
