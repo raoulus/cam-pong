@@ -1,5 +1,7 @@
 # Cam Pong
 
+**[Play it here](https://raoulus.github.io/cam-pong/)**
+
 Browser-based Pong game controlled by hand tracking via your webcam. Fullscreen, over-the-top effects, multi-ball chaos — designed to make kids flip out.
 
 Two players stand in front of the camera — the left half of the screen controls Player 1 (red), the right half controls Player 2 (blue). Move your hand up and down to move your paddle.
