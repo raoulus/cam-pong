@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; connect-src https://cdn.jsdelivr.net https://storage.googleapis.com; worker-src blob:; media-src 'self' blob: mediastream:">
   <title>CAM PONG</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -102,19 +103,7 @@
     </div>
   </div>
   <div id="status"></div>
-  <script>
-    document.querySelectorAll('input[name="control-mode"]').forEach(r => {
-      r.addEventListener('change', () => {
-        const desc = document.getElementById('mode-desc');
-        const labels = document.querySelectorAll('#mode-selector label');
-        labels.forEach(l => l.style.background = 'transparent');
-        r.closest('label').style.background = 'rgba(255,255,255,0.15)';
-        desc.textContent = r.value === 'fingers'
-          ? 'Show 1-5 fingers to position paddle in zones'
-          : 'Move hand up/down to control paddle';
-      });
-    });
-  </script>
+  <script src="js/ui.js" defer></script>
   <script type="module" src="js/game.js"></script>
 </body>
 </html>
